@@ -7,7 +7,7 @@ jobs:
 
   test-api:
     docker:
-      - image: cimg/node:20.0
+      - image: cimg/node:22.12
     working_directory: ~/repo
     steps:
       - checkout
@@ -22,7 +22,7 @@ jobs:
 
   test-web:
     docker:
-      - image: cimg/node:20.0
+      - image: cimg/node:22.12
     working_directory: ~/repo
     steps:
       - checkout
@@ -37,7 +37,7 @@ jobs:
 
   test-mobile:
     docker:
-      - image: cimg/node:20.0
+      - image: cimg/node:22.12
     working_directory: ~/repo
     steps:
       - checkout
