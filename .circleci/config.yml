@@ -1,0 +1,55 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@5.2.0
+
+jobs:
+
+  test-api:
+    docker:
+      - image: cimg/node:20.0
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          name: Build API
+          command: npx turbo run build --filter=@student-life/api
+      - run:
+          name: Tests API
+          command: npx turbo run test --filter=@student-life/api
+
+  test-web:
+    docker:
+      - image: cimg/node:20.0
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          name: Build Web
+          command: npx turbo run build --filter=@student-life/web
+      - run:
+          name: Tests Web
+          command: npx turbo run test --filter=@student-life/web
+
+  test-mobile:
+    docker:
+      - image: cimg/node:20.0
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          name: Tests Mobile
+          command: npx turbo run test --filter=@student-life/mobile
+
+workflows:
+  ci:
+    jobs:
+      - test-api
+      - test-web
+      - test-mobile
