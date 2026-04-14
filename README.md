@@ -3,9 +3,21 @@
 ## Commands
 
 ```bash
-npm run dev      # starts web + mobile + api in parallel
 npm run build    # builds apps in the correct order
 npm run lint     # runs lint across all apps
+```
+
+### Local Development (3 Terminals)
+
+```bash
+# Terminal 1: web
+npm run dev -w web
+
+# Terminal 2: mobile
+npm run dev -w mobile
+
+# Terminal 3: api
+npm run dev -w api
 ```
 
 ## Monorepo Structure
@@ -22,7 +34,7 @@ student-life/                          <- monorepo root (git)
 |   |-- backend/
 |   |   |-- api/                       <- NestJS REST API
 |   |   |   |-- src/
-|   |   |   |   |-- main.ts            <- entry point (port 3000)
+|   |   |   |   |-- main.ts            <- entry point (default port 3001)
 |   |   |   |   |-- app.module.ts
 |   |   |   |   |-- app.controller.ts
 |   |   |   |   `-- app.service.ts
