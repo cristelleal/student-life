@@ -12,9 +12,27 @@
     "build": "turbo build",
     "lint": "turbo lint",
     "test": "turbo test",
-    "format": "turbo format"
+    "format": "turbo format",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{js,cjs,mjs,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,css,html}": [
+      "prettier --write"
+    ]
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.5.0",
+    "@commitlint/config-conventional": "^20.5.0",
+    "@student-life/eslint-config": "^0.0.1",
+    "eslint": "^9.39.4",
+    "globals": "^17.5.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.8.2",
     "turbo": "^2.5.4"
   }
 }
