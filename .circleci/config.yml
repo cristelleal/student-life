@@ -10,7 +10,7 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
-      -run:
+      - run:
           name: Block Dev to Main
           command: |
             echo "Source branch: $CIRCLE_PR_BRANCH"
