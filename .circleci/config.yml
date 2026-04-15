@@ -14,13 +14,22 @@ jobs:
           name: Block Dev to Main
           command: |
             echo "Source branch: $CIRCLE_PR_BRANCH"
+            echo "Target branch: $CIRCLE_BRANCH"
+
+            if [ -z "$CIRCLE_PR_BRANCH" ]; then
+              echo "Pas de PR détectée, skip"
+              exit 0
+            fi
+
             if [ "$CIRCLE_BRANCH" = "main" ]; then
-              if [ "$SOURCE_BRANCH" = "dev" ] || \
-                echo "$SOURCE_BRANCH" | grep -qE '^(feature|fix)/'; then
-                echo "Merge de $SOURCE_BRANCH vers main interdit !"
+              if [ "$CIRCLE_PR_BRANCH" = "dev" ] || \
+                echo "$CIRCLE_PR_BRANCH" | grep -qE '^(feature|fix)/'; then
+                echo "Merge de $CIRCLE_PR_BRANCH vers main interdit !"
                 exit 1
               fi
             fi
+
+            echo "OK"
 
   test-api:
     docker:
