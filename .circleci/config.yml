@@ -5,6 +5,23 @@ orbs:
 
 jobs:
 
+
+  block-dev-to-main:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      -run:
+          name: Block Dev to Main
+          command: |
+            echo "Source branch: $CIRCLE_PR_BRANCH"
+            if [ "$CIRCLE_BRANCH" = "main" ]; then
+              if [ "$SOURCE_BRANCH" = "dev" ] || \
+                echo "$SOURCE_BRANCH" | grep -qE '^(feature|fix)/'; then
+                echo "Merge de $SOURCE_BRANCH vers main interdit !"
+                exit 1
+              fi
+            fi
+
   test-api:
     docker:
       - image: cimg/node:22.12
