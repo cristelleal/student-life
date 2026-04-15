@@ -67,6 +67,10 @@ jobs:
 workflows:
   ci:
     jobs:
+      - block-dev-to-main:
+        filters:
+          branches:
+            only: main
       - test-api
       - test-web
       - test-mobile
