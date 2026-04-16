@@ -31,10 +31,18 @@ jobs:
             echo "Source branch: $SOURCE_BRANCH"
             echo "Target branch: $TARGET_BRANCH"
 
+            # Règles vers main : seulement release/* et hotfix/*
             if [ "$TARGET_BRANCH" = "main" ]; then
-              if [ "$SOURCE_BRANCH" = "dev" ] || \
-                echo "$SOURCE_BRANCH" | grep -qE '^(feature|fix)/'; then
-                echo "Merge de $SOURCE_BRANCH vers main interdit !"
+              if ! echo "$SOURCE_BRANCH" | grep -qE '^(release|hotfix)/'; then
+                echo "Seules les branches release/* et hotfix/* peuvent etre merge dans main !"
+                exit 1
+              fi
+            fi
+
+            # Règles vers integration : seulement develop et hotfix/*
+            if [ "$TARGET_BRANCH" = "integration" ]; then
+              if [ "$SOURCE_BRANCH" != "develop" ] && ! echo "$SOURCE_BRANCH" | grep -qE '^hotfix/'; then
+                echo "Seules develop et hotfix/* peuvent etre merge dans integration !"
                 exit 1
               fi
             fi
