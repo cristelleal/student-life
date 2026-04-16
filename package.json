@@ -28,11 +28,20 @@
     "@commitlint/cli": "^20.5.0",
     "@commitlint/config-conventional": "^20.5.0",
     "@student-life/eslint-config": "^0.0.1",
+    "@types/node": "^25.6.0",
+    "@types/pg": "^8.20.0",
     "eslint": "^9.39.4",
     "globals": "^17.5.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
     "prettier": "^3.8.2",
+    "prisma": "^6.19.3",
     "turbo": "^2.5.4"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.7.0",
+    "@prisma/client": "^6.19.3",
+    "dotenv": "^17.4.2",
+    "pg": "^8.20.0"
   }
 }
