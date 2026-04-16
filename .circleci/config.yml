@@ -15,23 +15,25 @@ jobs:
             PR_NUMBER=$(echo $CIRCLE_PULL_REQUEST | grep -o '[0-9]*$')
 
             echo "PR Number: $PR_NUMBER"
-            echo "Target branch: $CIRCLE_BRANCH"
 
             if [ -z "$PR_NUMBER" ]; then
               echo "Pas de PR détectée, skip"
               exit 0
             fi
 
-            SOURCE_BRANCH=$(curl -s \
+            PR_DATA=$(curl -s \
               -H "Authorization: token $GITHUB_TOKEN" \
-              https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/pulls/$PR_NUMBER \
-              | python3 -c "import sys,json; print(json.load(sys.stdin)['head']['ref'])")
+              https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/pulls/$PR_NUMBER)
+
+            SOURCE_BRANCH=$(echo "$PR_DATA" | python3 -c "import sys,json; print(json.load(sys.stdin)['head']['ref'])")
+            TARGET_BRANCH=$(echo "$PR_DATA" | python3 -c "import sys,json; print(json.load(sys.stdin)['base']['ref'])")
 
             echo "Source branch: $SOURCE_BRANCH"
+            echo "Target branch: $TARGET_BRANCH"
 
-            if [ "$CIRCLE_BRANCH" = "main" ]; then
+            if [ "$TARGET_BRANCH" = "main" ]; then
               if [ "$SOURCE_BRANCH" = "dev" ] || \
-                 echo "$SOURCE_BRANCH" | grep -qE '^(feature|fix)/'; then
+                echo "$SOURCE_BRANCH" | grep -qE '^(feature|fix)/'; then
                 echo "Merge de $SOURCE_BRANCH vers main interdit !"
                 exit 1
               fi
