@@ -32,8 +32,8 @@ jobs:
             echo "Target branch: $TARGET_BRANCH"
 
             if [ "$TARGET_BRANCH" = "main" ]; then
-              if [ "$SOURCE_BRANCH" = "dev" ] || \
-                echo "$SOURCE_BRANCH" | grep -qE '^(feature|fix)/'; then
+              if ! echo "$SOURCE_BRANCH" | grep -qE '^(release|hotfix)/'; then
+                echo "Seules les branches release/* et hotfix/* peuvent etre merge dans main !"
                 echo "Merge de $SOURCE_BRANCH vers main interdit !"
                 exit 1
               fi
