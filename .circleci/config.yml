@@ -55,8 +55,9 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
-      - node/install-packages:
-          pkg-manager: npm
+      - run:
+          name: Install dependencies
+          command: npm install
       - run:
           name: Build API
           command: npx turbo run build --filter=@student-life/api
@@ -70,8 +71,9 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
-      - node/install-packages:
-          pkg-manager: npm
+      - run:
+          name: Install dependencies
+          command: npm install
       - run:
           name: Build Web
           command: npx turbo run build --filter=@student-life/web
@@ -85,8 +87,9 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
-      - node/install-packages:
-          pkg-manager: npm
+      - run:
+          name: Install dependencies
+          command: npm install
       - run:
           name: Tests Mobile
           command: npx turbo run test --filter=@student-life/mobile
