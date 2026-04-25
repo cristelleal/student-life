@@ -55,6 +55,9 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
+      - run:
+          name: Update npm to 11.2.0
+          command: sudo npm install -g npm@11.2.0
       - node/install-packages:
           pkg-manager: npm
       - run:
@@ -70,6 +73,9 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
+      - run:
+          name: Update npm to 11.2.0
+          command: sudo npm install -g npm@11.2.0
       - node/install-packages:
           pkg-manager: npm
       - run:
@@ -85,6 +91,9 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
+      - run:
+          name: Update npm to 11.2.0
+          command: sudo npm install -g npm@11.2.0
       - node/install-packages:
           pkg-manager: npm
       - run:
