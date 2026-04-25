@@ -17,7 +17,7 @@ jobs:
             echo "PR Number: $PR_NUMBER"
 
             if [ -z "$PR_NUMBER" ]; then
-              echo "Pas de PR detectee, skip"
+              echo "Pas de PR détectée, skip"
               exit 0
             fi
 
@@ -31,7 +31,7 @@ jobs:
             echo "Source branch: $SOURCE_BRANCH"
             echo "Target branch: $TARGET_BRANCH"
 
-            # Regles vers main : seulement release/* et hotfix/*
+            # Règles vers main : seulement release/* et hotfix/*
             if [ "$TARGET_BRANCH" = "main" ]; then
               if ! echo "$SOURCE_BRANCH" | grep -qE '^(release|hotfix)/'; then
                 echo "Seules les branches release/* et hotfix/* peuvent etre merge dans main !"
@@ -39,7 +39,7 @@ jobs:
               fi
             fi
 
-            # Regles vers integration : seulement develop et hotfix/*
+            # Règles vers integration : seulement develop et hotfix/*
             if [ "$TARGET_BRANCH" = "integration" ]; then
               if [ "$SOURCE_BRANCH" != "develop" ] && ! echo "$SOURCE_BRANCH" | grep -qE '^hotfix/'; then
                 echo "Seules develop et hotfix/* peuvent etre merge dans integration !"
@@ -55,11 +55,6 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
-      - run:
-          name: Enable corepack and activate npm 11.2.0
-          command: |
-            corepack enable
-            corepack prepare npm@11.2.0 --activate
       - node/install-packages:
           pkg-manager: npm
       - run:
@@ -75,11 +70,6 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
-      - run:
-          name: Enable corepack and activate npm 11.2.0
-          command: |
-            corepack enable
-            corepack prepare npm@11.2.0 --activate
       - node/install-packages:
           pkg-manager: npm
       - run:
@@ -95,11 +85,6 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
-      - run:
-          name: Enable corepack and activate npm 11.2.0
-          command: |
-            corepack enable
-            corepack prepare npm@11.2.0 --activate
       - node/install-packages:
           pkg-manager: npm
       - run:
