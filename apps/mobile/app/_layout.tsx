@@ -2,8 +2,7 @@ import '../global';
 import { useEffect, useState } from 'react';
 import { Stack, router } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { View, Image, Text } from 'react-native';
-import icon from '../assets/icon.png';
+import { View, Text } from 'react-native';
 import { authClient } from '../lib/auth-client';
 
 SplashScreen.preventAutoHideAsync();
@@ -40,7 +39,7 @@ export default function RootLayout() {
     return (
       <View className="flex-1 bg-[#08415C] items-center justify-center gap-8">
         <View className="w-32 h-32 rounded-3xl bg-white/20 items-center justify-center">
-          <Image source={icon} className="w-20 h-20" resizeMode="contain" />
+          <Text className="text-white text-5xl font-bold">SL</Text>
         </View>
         <Text className="text-white text-3xl font-bold tracking-wide">
           Student Life
