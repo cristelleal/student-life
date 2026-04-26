@@ -1,10 +1,17 @@
 import { createAuthClient } from 'better-auth/react';
+import { Platform } from 'react-native';
+
+const BASE_URL =
+  Platform.OS === 'web' ? 'http://localhost:3001' : 'http://192.168.1.129:3001'; // Modifier avec son IP : Windows -> ipconfig, Linux -> ifconfig
+
+const ORIGIN =
+  Platform.OS === 'web' ? 'http://localhost:8081' : 'http://192.168.1.129:8081';
 
 export const authClient = createAuthClient({
-  baseURL: 'http://192.168.1.129:3001', //En local donc modifier avec son ip sur windows : ipconfig sur linux : ifconfig
+  baseURL: BASE_URL,
   fetchOptions: {
     headers: {
-      Origin: 'http://192.168.1.129:8081',
+      Origin: ORIGIN,
     },
   },
 });

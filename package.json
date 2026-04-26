@@ -46,6 +46,7 @@
     "@prisma/adapter-pg": "^7.7.0",
     "@prisma/client": "^6.19.3",
     "dotenv": "^17.4.2",
-    "pg": "^8.20.0"
+    "pg": "^8.20.0",
+    "react-dom": "19.1.0"
   }
 }
