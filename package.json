@@ -20,7 +20,7 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.{js,cjs,mjs,ts,tsx}": [
+    "!(apps/mobile/babel.config.js|apps/mobile/metro.config.js|apps/mobile/tailwind.config.js)*.{js,cjs,mjs,ts,tsx}": [
       "eslint --fix",
       "prettier --write"
     ],
