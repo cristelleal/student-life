@@ -1,12 +1,5 @@
 import { useState, useCallback } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  Alert,
-} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { Link, router } from 'expo-router';
 import { authClient } from '../../lib/auth-client';
 
@@ -20,7 +13,6 @@ export default function LoginScreen() {
       Alert.alert('Erreur', 'Veuillez remplir tous les champs');
       return;
     }
-
     setLoading(true);
     const { data, error } = await authClient.signIn.email({ email, password });
     setLoading(false);
@@ -29,78 +21,64 @@ export default function LoginScreen() {
       Alert.alert('Erreur de connexion', error.message);
       return;
     }
-
     console.log('Connecté :', data);
     router.replace('/(tabs)');
   }, [email, password]);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Connexion</Text>
+    <View className="flex-1 bg-[#E5FCFF] justify-center px-6">
+      {/* Logo / Header */}
+      <View className="items-center mb-10">
+        <View className="w-16 h-16 rounded-2xl bg-[#08415C] items-center justify-center mb-4">
+          <Text className="text-white text-2xl font-bold">SL</Text>
+        </View>
+        <Text className="text-[#08415C] text-3xl font-bold">Connexion</Text>
+        <Text className="text-gray-400 text-sm mt-1">
+          Content de te revoir !
+        </Text>
+      </View>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
+      {/* Formulaire */}
+      <View className="gap-3">
+        <TextInput
+          className="bg-white border border-gray-200 rounded-xl px-4 py-4 text-gray-800 text-base"
+          placeholder="Email"
+          placeholderTextColor="#9ca3af"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+        <TextInput
+          className="bg-white border border-gray-200 rounded-xl px-4 py-4 text-gray-800 text-base"
+          placeholder="Mot de passe"
+          placeholderTextColor="#9ca3af"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+      </View>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Mot de passe"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-
+      {/* Bouton */}
       <TouchableOpacity
-        style={[styles.button, loading && styles.buttonDisabled]}
+        className={`bg-[#08415C] rounded-xl py-4 items-center mt-6 ${loading ? 'opacity-60' : ''}`}
         onPress={handleLogin}
         disabled={loading}
       >
-        <Text style={styles.buttonText}>
+        <Text className="text-white font-semibold text-base">
           {loading ? 'Connexion...' : 'Se connecter'}
         </Text>
       </TouchableOpacity>
 
-      <Link href="/(auth)/register" style={styles.link}>
-        Pas encore de compte ? S&apos;inscrire
-      </Link>
+      {/* Lien register */}
+      <View className="items-center mt-6">
+        <Link href="/(auth)/register">
+          <Text className="text-[#08415C] text-sm">
+            Pas encore de compte ?{' '}
+            <Text className="font-bold">S&apos;inscrire</Text>
+          </Text>
+        </Link>
+      </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 24,
-    backgroundColor: '#fff',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    marginBottom: 32,
-    textAlign: 'center',
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    padding: 14,
-    marginBottom: 16,
-    fontSize: 16,
-  },
-  button: {
-    backgroundColor: '#6366f1',
-    borderRadius: 8,
-    padding: 16,
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  buttonDisabled: { opacity: 0.6 },
-  buttonText: { color: '#fff', fontSize: 16, fontWeight: '600' },
-  link: { marginTop: 20, textAlign: 'center', color: '#6366f1' },
-});

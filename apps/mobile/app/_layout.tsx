@@ -1,26 +1,40 @@
 import '../global';
 import { useEffect, useState } from 'react';
-import { Stack } from 'expo-router';
+import { Stack, router } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { View, Image, Text } from 'react-native';
 import icon from '../assets/icon.png';
+import { authClient } from '../lib/auth-client';
 
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [showSplash, setShowSplash] = useState(true);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     async function prepare() {
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-      } finally {
-        await SplashScreen.hideAsync();
-        setTimeout(() => setShowSplash(false), 500);
-      }
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+      await SplashScreen.hideAsync();
+      setShowSplash(false);
+      setIsReady(true);
     }
     prepare();
   }, []);
+
+  useEffect(() => {
+    if (!isReady) return;
+
+    async function checkSession() {
+      const session = await authClient.getSession();
+      if (session?.data?.user) {
+        router.replace('/(tabs)');
+      } else {
+        router.replace('/(auth)/login');
+      }
+    }
+    checkSession();
+  }, [isReady]);
 
   if (showSplash) {
     return (
