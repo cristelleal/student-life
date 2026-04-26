@@ -2,8 +2,12 @@ import { useState, useCallback } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { Link, router } from 'expo-router';
 import { authClient } from '../../lib/auth-client';
+import { useRef } from 'react';
+import { TextInput as RNTextInput } from 'react-native';
 
 export default function LoginScreen() {
+  const passwordRef = useRef<RNTextInput>(null);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -48,14 +52,20 @@ export default function LoginScreen() {
           onChangeText={setEmail}
           keyboardType="email-address"
           autoCapitalize="none"
+          returnKeyType="next"
+          onSubmitEditing={() => passwordRef.current?.focus()}
+          submitBehavior="submit"
         />
         <TextInput
+          ref={passwordRef}
           className="bg-white border border-gray-200 rounded-xl px-4 py-4 text-gray-800 text-base"
           placeholder="Mot de passe"
           placeholderTextColor="#9ca3af"
           value={password}
           onChangeText={setPassword}
           secureTextEntry
+          returnKeyType="done"
+          onSubmitEditing={handleLogin}
         />
       </View>
 

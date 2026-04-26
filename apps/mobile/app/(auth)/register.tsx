@@ -9,8 +9,15 @@ import {
 } from 'react-native';
 import { Link, router } from 'expo-router';
 import { authClient } from '../../lib/auth-client';
+import { useRef } from 'react';
+import { TextInput as RNTextInput } from 'react-native';
 
 export default function RegisterScreen() {
+  const lastNameRef = useRef<RNTextInput>(null);
+  const emailRef = useRef<RNTextInput>(null);
+  const passwordRef = useRef<RNTextInput>(null);
+  const confirmPasswordRef = useRef<RNTextInput>(null);
+
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -74,17 +81,25 @@ export default function RegisterScreen() {
             placeholderTextColor="#9ca3af"
             value={firstName}
             onChangeText={setFirstName}
+            returnKeyType="next"
+            onSubmitEditing={() => lastNameRef.current?.focus()}
+            submitBehavior="submit"
           />
           <TextInput
+            ref={lastNameRef}
             className="flex-1 bg-white border border-gray-200 rounded-xl px-4 py-4 text-gray-800 text-base"
             placeholder="Nom"
             placeholderTextColor="#9ca3af"
             value={lastName}
             onChangeText={setLastName}
+            returnKeyType="next"
+            onSubmitEditing={() => emailRef.current?.focus()}
+            submitBehavior="submit"
           />
         </View>
 
         <TextInput
+          ref={emailRef}
           className="bg-white border border-gray-200 rounded-xl px-4 py-4 text-gray-800 text-base"
           placeholder="Email"
           placeholderTextColor="#9ca3af"
@@ -92,24 +107,34 @@ export default function RegisterScreen() {
           onChangeText={setEmail}
           keyboardType="email-address"
           autoCapitalize="none"
+          returnKeyType="next"
+          onSubmitEditing={() => passwordRef.current?.focus()}
+          submitBehavior="submit"
         />
 
         <TextInput
+          ref={passwordRef}
           className="bg-white border border-gray-200 rounded-xl px-4 py-4 text-gray-800 text-base"
           placeholder="Mot de passe"
           placeholderTextColor="#9ca3af"
           value={password}
           onChangeText={setPassword}
           secureTextEntry
+          returnKeyType="next"
+          onSubmitEditing={() => confirmPasswordRef.current?.focus()}
+          submitBehavior="submit"
         />
 
         <TextInput
+          ref={confirmPasswordRef}
           className="bg-white border border-gray-200 rounded-xl px-4 py-4 text-gray-800 text-base"
           placeholder="Confirmer le mot de passe"
           placeholderTextColor="#9ca3af"
           value={confirmPassword}
           onChangeText={setConfirmPassword}
           secureTextEntry
+          returnKeyType="done"
+          onSubmitEditing={handleRegister}
         />
       </View>
 
