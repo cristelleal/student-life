@@ -4,13 +4,18 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
   Alert,
+  Platform,
+  ScrollView,
 } from 'react-native';
 import { Link, router } from 'expo-router';
 import { authClient } from '../../lib/auth-client';
+import { useRef } from 'react';
+import { TextInput as RNTextInput } from 'react-native';
 
 export default function LoginScreen() {
+  const passwordRef = useRef<RNTextInput>(null);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -20,7 +25,6 @@ export default function LoginScreen() {
       Alert.alert('Erreur', 'Veuillez remplir tous les champs');
       return;
     }
-
     setLoading(true);
     const { data, error } = await authClient.signIn.email({ email, password });
     setLoading(false);
@@ -29,78 +33,107 @@ export default function LoginScreen() {
       Alert.alert('Erreur de connexion', error.message);
       return;
     }
-
     console.log('Connecté :', data);
     router.replace('/(tabs)');
   }, [email, password]);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Connexion</Text>
-
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Mot de passe"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-
-      <TouchableOpacity
-        style={[styles.button, loading && styles.buttonDisabled]}
-        onPress={handleLogin}
-        disabled={loading}
+    <ScrollView
+      className="flex-1 bg-[#E5FCFF]"
+      contentContainerClassName="flex-1 justify-center items-center px-4 py-12"
+      showsVerticalScrollIndicator={false}
+    >
+      <View
+        className="w-full max-w-md bg-white rounded-3xl shadow-lg"
+        style={{ padding: Platform.OS === 'web' ? 32 : 24 }}
       >
-        <Text style={styles.buttonText}>
-          {loading ? 'Connexion...' : 'Se connecter'}
-        </Text>
-      </TouchableOpacity>
+        {/* Header */}
+        <View className="items-center mb-10">
+          <View
+            className="rounded-2xl bg-[#08415C] items-center justify-center mb-4"
+            style={{
+              width: Platform.OS === 'web' ? 64 : 80,
+              height: Platform.OS === 'web' ? 64 : 80,
+            }}
+          >
+            <Text
+              style={{ fontSize: Platform.OS === 'web' ? 24 : 30 }}
+              className="text-white font-bold"
+            >
+              SL
+            </Text>
+          </View>
+          <Text
+            style={{ fontSize: Platform.OS === 'web' ? 28 : 34 }}
+            className="text-[#08415C] font-bold"
+          >
+            Connexion
+          </Text>
+          <Text className="text-gray-400 text-sm mt-1">
+            Content de te revoir !
+          </Text>
+        </View>
 
-      <Link href="/(auth)/register" style={styles.link}>
-        Pas encore de compte ? S&apos;inscrire
-      </Link>
-    </View>
+        {/* Inputs */}
+        <View className="gap-3">
+          <TextInput
+            className="bg-[#E5FCFF] border border-gray-200 rounded-xl px-4 text-gray-800"
+            style={{
+              paddingVertical: Platform.OS === 'web' ? 14 : 18,
+              fontSize: Platform.OS === 'web' ? 14 : 16,
+            }}
+            placeholder="Email"
+            placeholderTextColor="#9ca3af"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            returnKeyType="next"
+            onSubmitEditing={() => passwordRef.current?.focus()}
+            submitBehavior="submit"
+          />
+          <TextInput
+            ref={passwordRef}
+            className="bg-[#E5FCFF] border border-gray-200 rounded-xl px-4 text-gray-800"
+            style={{
+              paddingVertical: Platform.OS === 'web' ? 14 : 18,
+              fontSize: Platform.OS === 'web' ? 14 : 16,
+            }}
+            placeholder="Mot de passe"
+            placeholderTextColor="#9ca3af"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            returnKeyType="done"
+            onSubmitEditing={handleLogin}
+          />
+        </View>
+
+        {/* Bouton */}
+        <TouchableOpacity
+          className={`bg-[#08415C] rounded-xl items-center mt-6 ${loading ? 'opacity-60' : ''}`}
+          style={{ paddingVertical: Platform.OS === 'web' ? 14 : 18 }}
+          onPress={handleLogin}
+          disabled={loading}
+        >
+          <Text
+            style={{ fontSize: Platform.OS === 'web' ? 14 : 17 }}
+            className="text-white font-semibold"
+          >
+            {loading ? 'Connexion...' : 'Se connecter'}
+          </Text>
+        </TouchableOpacity>
+
+        {/* Lien */}
+        <View className="items-center mt-6">
+          <Link href="/(auth)/register">
+            <Text className="text-[#08415C] text-sm">
+              Pas encore de compte ?{' '}
+              <Text className="font-bold">S&apos;inscrire</Text>
+            </Text>
+          </Link>
+        </View>
+      </View>
+    </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 24,
-    backgroundColor: '#fff',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    marginBottom: 32,
-    textAlign: 'center',
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    padding: 14,
-    marginBottom: 16,
-    fontSize: 16,
-  },
-  button: {
-    backgroundColor: '#6366f1',
-    borderRadius: 8,
-    padding: 16,
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  buttonDisabled: { opacity: 0.6 },
-  buttonText: { color: '#fff', fontSize: 16, fontWeight: '600' },
-  link: { marginTop: 20, textAlign: 'center', color: '#6366f1' },
-});
