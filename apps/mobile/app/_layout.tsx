@@ -1,5 +1,5 @@
 import '../global';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Stack, router } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { View, Text } from 'react-native';
@@ -9,20 +9,21 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [showSplash, setShowSplash] = useState(true);
-  const [isReady, setIsReady] = useState(false);
+  const hasNavigated = useRef(false);
 
   useEffect(() => {
     async function prepare() {
       await new Promise((resolve) => setTimeout(resolve, 3000));
       await SplashScreen.hideAsync();
-      setShowSplash(false);
-      setIsReady(true);
+      setShowSplash(false); // Le Stack va se monter
     }
     prepare();
   }, []);
 
   useEffect(() => {
-    if (!isReady) return;
+    if (showSplash) return; // Attendre que le Stack soit monté
+    if (hasNavigated.current) return;
+    hasNavigated.current = true;
 
     async function checkSession() {
       const session = await authClient.getSession();
@@ -32,8 +33,9 @@ export default function RootLayout() {
         router.replace('/(auth)/login');
       }
     }
+
     checkSession();
-  }, [isReady]);
+  }, [showSplash]); // Se déclenche quand showSplash passe à false
 
   if (showSplash) {
     return (
