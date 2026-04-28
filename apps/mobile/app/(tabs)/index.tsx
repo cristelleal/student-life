@@ -1,11 +1,22 @@
 import { View, Text, ScrollView } from 'react-native';
+import { useEffect, useState } from 'react';
+import { authClient } from '../../lib/auth-client';
 
 export default function HomeScreen() {
+  const [firstName, setFirstName] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadSession() {
+      const session = await authClient.getSession();
+      setFirstName(session?.data?.user?.name?.split(' ')[0] ?? null);
+    }
+    loadSession();
+  }, []);
   return (
     <View className="flex-1 bg-[#E5FCFF]">
       {/* Header */}
       <View className="bg-[#08415C] pt-16 pb-6 px-6">
-        <Text className="text-white/70 text-sm">Bonjour 👋</Text>
+        <Text className="text-white/70 text-sm">Bonjour {firstName} 👋</Text>
         <Text className="text-white text-2xl font-bold mt-1">Étudiant</Text>
       </View>
 
