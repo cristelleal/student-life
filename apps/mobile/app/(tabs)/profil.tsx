@@ -16,19 +16,37 @@ export default function ProfilScreen() {
   const [lastName, setLastName] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
   const [profilPicture, setProfilPicture] = useState<string | null>(null);
+  const [establishment, setEstablishment] = useState<string | null>(null);
+  const [sector, setSector] = useState<string | null>(null);
+  const [studyLevel, setStudyLevel] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadSession() {
       const session = await authClient.getSession();
+      console.log('session?.data?.user :', session?.data?.user);
+      console.log('establishment :', session?.data?.user?.establishment);
+      console.log('sector :', session?.data?.user?.sector);
+      console.log('studyLevel:', session?.data?.user?.studyLevel);
       setFirstName(session?.data?.user?.name?.split(' ')[0] ?? null);
       setLastName(session?.data?.user?.name?.split(' ')[1] ?? null);
       setEmail(session?.data?.user?.email ?? null);
       setProfilPicture(session?.data?.user?.image ?? null);
+      setEstablishment(session?.data?.user?.establishment ?? null);
+      setSector(session?.data?.user?.sector ?? null);
+      setStudyLevel(session?.data?.user?.studyLevel ?? null);
     }
     loadSession();
   }, []);
   const handleSave = () => {
-    console.log('Sauvegarde :', firstName, lastName, email);
+    console.log(
+      'Sauvegarde :',
+      firstName,
+      lastName,
+      email,
+      establishment,
+      sector,
+      studyLevel,
+    );
     // A changer : Il faut envoyer les données vers le backend
   };
   const handleLogout = async () => {
@@ -137,10 +155,10 @@ export default function ProfilScreen() {
                 paddingVertical: Platform.OS === 'web' ? 8 : 12,
                 fontSize: Platform.OS === 'web' ? 10 : 12,
               }}
-              placeholder="Filière"
+              placeholder="Sector"
               placeholderTextColor="#9ca3af"
-              value={lastName ?? ''}
-              onChangeText={setLastName}
+              value={sector ?? ''}
+              onChangeText={setSector}
             />
           </View>
           {/* Niveau d&apos;étude */}
@@ -154,10 +172,10 @@ export default function ProfilScreen() {
                 paddingVertical: Platform.OS === 'web' ? 8 : 12,
                 fontSize: Platform.OS === 'web' ? 10 : 12,
               }}
-              placeholder="NiveauEtude"
+              placeholder="Niveau d'étude"
               placeholderTextColor="#9ca3af"
-              value={lastName ?? ''}
-              onChangeText={setLastName}
+              value={studyLevel ?? ''}
+              onChangeText={setStudyLevel}
             />
           </View>
 
@@ -174,8 +192,8 @@ export default function ProfilScreen() {
               }}
               placeholder="Établissement"
               placeholderTextColor="#9ca3af"
-              value={lastName ?? ''}
-              onChangeText={setLastName}
+              value={establishment ?? ''}
+              onChangeText={setEstablishment}
             />
           </View>
 

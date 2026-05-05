@@ -26,6 +26,18 @@ export const auth = betterAuth({
         type: 'string',
         required: true,
       },
+      establishment: {
+        type: 'string',
+        required: true,
+      },
+      studyLevel: {
+        type: 'string',
+        required: false,
+      },
+      sector: {
+        type: 'string',
+        required: false,
+      },
     },
   },
 });

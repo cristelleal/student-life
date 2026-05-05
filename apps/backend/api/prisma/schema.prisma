@@ -17,8 +17,11 @@ model User {
   image         String?
   createdAt     DateTime
   updatedAt     DateTime
-  sessions      Session[]
+  establishment String?
+  sector        String?
+  studyLevel    String?
   accounts      Account[]
+  sessions      Session[]
 }
 
 model Session {
@@ -28,9 +31,9 @@ model Session {
   expiresAt DateTime
   ipAddress String?
   userAgent String?
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime
   updatedAt DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Account {
@@ -45,9 +48,9 @@ model Account {
   scope                 String?
   idToken               String?
   password              String?
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt             DateTime
   updatedAt             DateTime
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Verification {
