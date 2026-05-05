@@ -23,10 +23,6 @@ export default function ProfilScreen() {
   useEffect(() => {
     async function loadSession() {
       const session = await authClient.getSession();
-      console.log('session?.data?.user :', session?.data?.user);
-      console.log('establishment :', session?.data?.user?.establishment);
-      console.log('sector :', session?.data?.user?.sector);
-      console.log('studyLevel:', session?.data?.user?.studyLevel);
       setFirstName(session?.data?.user?.name?.split(' ')[0] ?? null);
       setLastName(session?.data?.user?.name?.split(' ')[1] ?? null);
       setEmail(session?.data?.user?.email ?? null);
