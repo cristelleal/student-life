@@ -28,7 +28,7 @@ export const auth = betterAuth({
       },
       establishment: {
         type: 'string',
-        required: true,
+        required: false,
       },
       studyLevel: {
         type: 'string',
