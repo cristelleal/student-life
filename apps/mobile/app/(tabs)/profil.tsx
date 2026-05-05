@@ -128,17 +128,9 @@ export default function ProfilScreen() {
             <Text className="text-gray-500 text-xs font-medium ml-1">
               Email
             </Text>
-            <TextInput
-              className="bg-[#E5FCFF] border border-gray-200 rounded-xl px-4 text-gray-800 w-full"
-              style={{
-                paddingVertical: Platform.OS === 'web' ? 8 : 12,
-                fontSize: Platform.OS === 'web' ? 10 : 12,
-              }}
-              placeholder="Email"
-              placeholderTextColor="#9ca3af"
-              value={email ?? ''}
-              onChangeText={setEmail}
-            />
+            <Text className="text-black-500 text-md font-medium ml-1">
+              {email ?? ''}
+            </Text>
           </View>
           {/* Filière */}
           <View className="gap-1">
