@@ -9,6 +9,7 @@ import {
 import { router } from 'expo-router';
 import { Platform } from 'react-native';
 import { authClient } from '../../lib/auth-client';
+import { userUpdateSchema } from '../../lib/schemas/user';
 import { useEffect, useState } from 'react';
 
 export default function ProfilScreen() {
@@ -37,13 +38,23 @@ export default function ProfilScreen() {
     loadSession();
   }, []);
   const handleSave = async () => {
-    console.log('----------- Sauvegarde -----------');
-    console.log('Prénom : ', firstName);
-    console.log('Nom : ', lastName);
-    console.log('Email : ', email);
-    console.log('Établissement : ', establishment);
-    console.log('Secteur : ', sector);
-    console.log("Niveau d'étude : ", studyLevel);
+    const validation = userUpdateSchema.safeParse({
+      firstName,
+      lastName,
+      establishment,
+      sector,
+      studyLevel,
+    });
+
+    if (!validation.success) {
+      Alert.alert('Erreur', 'Validation échouée');
+      return;
+    }
+
+    console.log('----------- Validation -----------');
+    console.log('Validation:', validation);
+    console.log('----------- Form Data ----------');
+    console.log('Validation réussie :', validation.data);
 
     const response = await fetch('http://192.168.1.14:3001/api/users/me', {
       method: 'PATCH',
@@ -51,13 +62,7 @@ export default function ProfilScreen() {
         'Content-Type': 'application/json',
       },
       credentials: 'include', // pour envoyer les cookies d'auth
-      body: JSON.stringify({
-        firstName,
-        lastName,
-        establishment,
-        sector,
-        studyLevel,
-      }),
+      body: JSON.stringify(validation.data),
     });
 
     if (response.ok) {
