@@ -22,29 +22,50 @@ export default function ProfilScreen() {
 
   useEffect(() => {
     async function loadSession() {
-      const session = await authClient.getSession();
-      setFirstName(session?.data?.user?.name?.split(' ')[0] ?? null);
-      setLastName(session?.data?.user?.name?.split(' ')[1] ?? null);
-      setEmail(session?.data?.user?.email ?? null);
-      setProfilPicture(session?.data?.user?.image ?? null);
-      setEstablishment(session?.data?.user?.establishment ?? null);
-      setSector(session?.data?.user?.sector ?? null);
-      setStudyLevel(session?.data?.user?.studyLevel ?? null);
+      const response = await fetch('http://192.168.1.14:3001/api/users/me', {
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const userData = await response.json();
+      setFirstName(userData.firstName ?? null);
+      setLastName(userData.lastName ?? null);
+      setEmail(userData.email ?? null);
+      setProfilPicture(userData.image ?? null);
+      setEstablishment(userData.establishment ?? null);
+      setSector(userData.sector ?? null);
+      setStudyLevel(userData.studyLevel ?? null);
     }
     loadSession();
   }, []);
-  const handleSave = () => {
-    console.log(
-      'Sauvegarde :',
-      firstName,
-      lastName,
-      email,
-      establishment,
-      sector,
-      studyLevel,
-    );
-    // A changer : Il faut envoyer les données vers le backend
+  const handleSave = async () => {
+    console.log('----------- Sauvegarde -----------');
+    console.log('Prénom : ', firstName);
+    console.log('Nom : ', lastName);
+    console.log('Email : ', email);
+    console.log('Établissement : ', establishment);
+    console.log('Secteur : ', sector);
+    console.log("Niveau d'étude : ", studyLevel);
+
+    const response = await fetch('http://192.168.1.14:3001/api/users/me', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include', // pour envoyer les cookies d'auth
+      body: JSON.stringify({
+        firstName,
+        lastName,
+        establishment,
+        sector,
+        studyLevel,
+      }),
+    });
+
+    if (response.ok) {
+      const updatedUser = await response.json();
+      console.log('Profil mis à jour:', updatedUser);
+    }
   };
+
   const handleLogout = async () => {
     const doLogout = async () => {
       await authClient.signOut();
