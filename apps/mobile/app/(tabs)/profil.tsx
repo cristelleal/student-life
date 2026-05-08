@@ -47,27 +47,33 @@ export default function ProfilScreen() {
     });
 
     if (!validation.success) {
-      Alert.alert('Erreur', 'Validation échouée');
+      Alert.alert('Erreur', 'Données invalides');
       return;
     }
 
-    console.log('----------- Validation -----------');
-    console.log('Validation:', validation);
-    console.log('----------- Form Data ----------');
-    console.log('Validation réussie :', validation.data);
+    try {
+      const response = await fetch('http://192.168.1.14:3001/api/users/me', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(validation.data),
+      });
 
-    const response = await fetch('http://192.168.1.14:3001/api/users/me', {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include', // pour envoyer les cookies d'auth
-      body: JSON.stringify(validation.data),
-    });
+      if (!response.ok) {
+        // ❌ Erreur HTTP (400, 401, 500, etc.)
+        const error = await response.json();
+        Alert.alert('Erreur', error.message || 'Impossible de mettre à jour');
+        return;
+      }
 
-    if (response.ok) {
+      // ✅ Succès
       const updatedUser = await response.json();
+      Alert.alert('Succès', 'Profil mis à jour');
       console.log('Profil mis à jour:', updatedUser);
+    } catch (error) {
+      // ❌ Erreur réseau
+      Alert.alert('Erreur', 'Problème de connexion');
+      console.error(error);
     }
   };
 
