@@ -27,9 +27,9 @@ export default function ProfilScreen() {
         headers: { 'Content-Type': 'application/json' },
       });
       const userData = await response.json();
-      setFirstName(userData.firstName ?? null);
-      setLastName(userData.lastName ?? null);
-      setEmail(userData.email ?? null);
+      setFirstName(userData.firstName);
+      setLastName(userData.lastName);
+      setEmail(userData.email);
       setProfilPicture(userData.image ?? null);
       setEstablishment(userData.establishment ?? null);
       setSector(userData.sector ?? null);
@@ -37,6 +37,7 @@ export default function ProfilScreen() {
     }
     loadSession();
   }, []);
+
   const handleSave = async () => {
     const validation = userUpdateSchema.safeParse({
       firstName,
